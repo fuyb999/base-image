@@ -94,8 +94,8 @@ touch /etc/rclone/rclone.conf
 #nvm alias default $NODE_VERSION
 
 # Ensure correct environment for child builds
-printf "source %s/nvm.sh\n" "$NVM_DIR" >> /opt/ai-dock/etc/environment.sh
-printf "source %s/bash_completion\n" "$NVM_DIR" >> /opt/ai-dock/etc/environment.sh
+#printf "source %s/nvm.sh\n" "$NVM_DIR" >> /opt/ai-dock/etc/environment.sh
+#printf "source %s/bash_completion\n" "$NVM_DIR" >> /opt/ai-dock/etc/environment.sh
 printf "source /opt/ai-dock/etc/environment.sh\n" >> /etc/profile.d/02-ai-dock.sh
 printf "source /opt/ai-dock/etc/environment.sh\n" >> /etc/bash.bashrc
 printf "ready-test\n" >> /root/.bashrc

@@ -8,7 +8,11 @@ function cleanup() {
 
 function start() {
     source /opt/ai-dock/etc/environment.sh
-    
+
+    if [[ ${PLASMA_ENABLED,,} == false ]]; then
+       exec sleep 10
+    fi
+
     if [[ -f /run/workspace_sync ]]; then
         printf "Waiting for workspace sync to complete...\n"
         while [[ -f /run/workspace_sync ]]; do

@@ -135,9 +135,11 @@ init_set_web_config() {
   if [[ -z $WEB_PASSWORD ]]; then
       export WEB_PASSWORD="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)"
   fi
-  
-  export WEB_PASSWORD_B64="$(caddy hash-password -p $WEB_PASSWORD)"
-  
+
+  if [[ -n "$(which caddy)" ]]; then
+     export WEB_PASSWORD_B64="$(caddy hash-password -p $WEB_PASSWORD)"
+  fi
+
   if [[ -z $WEB_TOKEN ]]; then
       export WEB_TOKEN="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
   fi

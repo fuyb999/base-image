@@ -12,6 +12,10 @@ function start() {
     # Give processes time to register their ports
     sleep 2
 
+    if [[ ${PLASMA_ENABLED,,} == false ]]; then
+       exec sleep 10
+    fi
+
     export SERVICEPORTAL_HOME=$(direct-url.sh -p "${SERVICEPORTAL_PORT_HOST:-1111}")
     env-store SERVICEPORTAL_HOME
     export SERVICEPORTAL_LOGIN="${SERVICEPORTAL_HOME}/login"

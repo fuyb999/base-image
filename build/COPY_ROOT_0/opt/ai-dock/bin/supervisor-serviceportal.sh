@@ -21,8 +21,10 @@ function cleanup() {
 
 function start() {
     source /opt/ai-dock/etc/environment.sh
+    if [[ ${PLASMA_ENABLED,,} == false ]]; then
+       exec sleep 10
+    fi
     source /opt/ai-dock/bin/venv-set.sh serviceportal
-    
     file_content="$(
       jq --null-input \
         --arg listen_port "${LISTEN_PORT}" \

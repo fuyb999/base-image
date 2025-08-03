@@ -26,7 +26,9 @@ function run_with_retry() {
 
 function start() {
     source /opt/ai-dock/etc/environment.sh
-    
+    if [[ ${PLASMA_ENABLED,,} == false ]]; then
+       exec sleep 10
+    fi
     file_content="$(
       jq --null-input \
         --arg listen_port "${LISTEN_PORT}" \

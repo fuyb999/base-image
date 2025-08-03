@@ -7,96 +7,45 @@ chmod g+s /opt
 
 mkdir -p /opt/environments/{python,javascript}
 
-dpkg --add-architecture i386
-apt-get update
-apt-get upgrade -y --no-install-recommends
+#dpkg --add-architecture i386
+#apt-get update
+#apt-get upgrade -y --no-install-recommends
 
 # System packages
-$APT_INSTALL \
-    acl \
-    apt-transport-https \
-    apt-utils \
-    bc \
-    build-essential \
-    bzip2 \
-    ca-certificates \
-    cmake \
-    curl \
-    dnsutils \
-    dos2unix \
-    fakeroot \
-    ffmpeg \
-    file \
-    fonts-dejavu \
-    fonts-freefont-ttf \
-    fonts-ubuntu \
-    fuse3 \
-    git \
-    git-lfs \
-    gnupg \
-    gpg \
-    gzip \
-    htop \
-    inotify-tools \
-    jq \
-    language-pack-en \
-    less \
-    libcap2-bin \
-    libelf1 \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libtcmalloc-minimal4 \
-    locales \
-    lsb-release \
-    lsof \
-    man \
-    mlocate \
-    net-tools \
-    nano \
-    openssh-server \
-    pkg-config \
-    psmisc \
-    python3-full \
-    python3-pip \
-    python3-venv \
-    rar \
-    rclone \
-    rsync \
-    screen \
-    software-properties-common \
-    sox \
-    ssl-cert \
-    sudo \
-    supervisor \
-    tmux \
-    tzdata \
-    unar \
-    unrar \
-    unzip \
-    vim \
-    wget \
-    xz-utils \
-    zip \
-    zstd
-    
-ln -sf $(ldconfig -p | grep -Po "libtcmalloc_minimal.so.\d" | head -n 1) \
-        /lib/x86_64-linux-gnu/libtcmalloc.so
+#$APT_INSTALL \
+#    sudo \
+#    fakeroot \
+#    locales \
+#    libtcmalloc-minimal4 \
+#    && \
+#    echo "**** Section cleanup ****" \
+#        && apt-get clean autoclean -y \
+#        && apt-get autoremove -y \
+#        && rm -rf \
+#            /var/lib/apt/lists/* \
+#            /var/tmp/* \
+#            /tmp/* \
+#    && \
+#    echo
+#
+#ln -sf $(ldconfig -p | grep -Po "libtcmalloc_minimal.so.\d" | head -n 1) \
+#        /lib/x86_64-linux-gnu/libtcmalloc.so
+
+#locale-gen en_US.UTF-8
 
 # Ensure deadsnakes is available for Python versions not included with base distribution
-add-apt-repository ppa:deadsnakes/ppa
-apt update
-  
-locale-gen en_US.UTF-8
+#add-apt-repository ppa:deadsnakes/ppa
+#apt update
 
 # Install 
-python3.10 -m venv "$SERVICEPORTAL_VENV"
-"$SERVICEPORTAL_VENV_PIP" install \
-    --no-cache-dir -r /opt/ai-dock/fastapi/requirements.txt
+#python3.10 -m venv "$SERVICEPORTAL_VENV"
+#"$SERVICEPORTAL_VENV_PIP" install \
+#    --no-cache-dir -r /opt/ai-dock/fastapi/requirements.txt
 
 # Get Cloudflare daemon
-wget -c -O cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-dpkg -i cloudflared.deb
-rm cloudflared.deb
+#wget -c -O cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+#dpkg -i cloudflared.deb
+#rm cloudflared.deb
 
 # Prepare environment for running SSHD
 chmod 700 /root
@@ -121,27 +70,28 @@ touch /etc/rclone/rclone.conf
 
 # Install SyncThing to enable transport between local machine and cloud instance
 
-export SYNCTHING_VERSION="$(curl -fsSL "https://api.github.com/repos/syncthing/syncthing/releases/latest" \
-            | jq -r '.tag_name' | sed 's/[^0-9\.\-]*//g')"
-env-store SYNCTHING_VERSION
+#export SYNCTHING_VERSION="$(curl -fsSL "https://api.github.com/repos/syncthing/syncthing/releases/latest" \
+#            | jq -r '.tag_name' | sed 's/[^0-9\.\-]*//g')"
+#env-store SYNCTHING_VERSION
+#
+#SYNCTHING_URL="https://github.com/syncthing/syncthing/releases/download/v${SYNCTHING_VERSION}/syncthing-linux-amd64-v${SYNCTHING_VERSION}.tar.gz"
+#mkdir /opt/syncthing/
+#wget -O /opt/syncthing.tar.gz $SYNCTHING_URL && (cd /opt && tar -zxf syncthing.tar.gz -C /opt/syncthing/ --strip-components=1) && rm -f /opt/syncthing.tar.gz
+#if [[ -f /opt/syncthing/syncthing ]]; then
+#    ln -s /opt/syncthing/syncthing /opt/ai-dock/bin/syncthing
+#else
+#    echo "Failed to fetch syncthing. Exiting build"
+#    exit 1
+#fi
 
-SYNCTHING_URL="https://github.com/syncthing/syncthing/releases/download/v${SYNCTHING_VERSION}/syncthing-linux-amd64-v${SYNCTHING_VERSION}.tar.gz"
-mkdir /opt/syncthing/
-wget -O /opt/syncthing.tar.gz $SYNCTHING_URL && (cd /opt && tar -zxf syncthing.tar.gz -C /opt/syncthing/ --strip-components=1) && rm -f /opt/syncthing.tar.gz
-if [[ -f /opt/syncthing/syncthing ]]; then
-    ln -s /opt/syncthing/syncthing /opt/ai-dock/bin/syncthing
-else
-    echo "Failed to fetch syncthing. Exiting build"
-    exit 1
-fi
 # Install node version manager and latest nodejs
-export NVM_DIR=/opt/nvm
-env-store NVM_DIR
-git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-(cd "$NVM_DIR" && git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`)
-source $NVM_DIR/nvm.sh
-nvm install $NODE_VERSION
-nvm alias default $NODE_VERSION
+#export NVM_DIR=/opt/nvm
+#env-store NVM_DIR
+#git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+#(cd "$NVM_DIR" && git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`)
+#source $NVM_DIR/nvm.sh
+#nvm install $NODE_VERSION
+#nvm alias default $NODE_VERSION
 
 # Ensure correct environment for child builds
 printf "source %s/nvm.sh\n" "$NVM_DIR" >> /opt/ai-dock/etc/environment.sh

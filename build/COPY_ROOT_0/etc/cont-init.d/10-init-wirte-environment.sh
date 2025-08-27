@@ -5,7 +5,6 @@
 #
 
 set -e # Exit immediately if a command exits with a non-zero status.
-set -u # Treat unset variables as an error.
 
  # Ensure all variables available for interactive sessions
 sed -i '7,$d' /opt/ai-dock/etc/environment.sh

@@ -283,15 +283,6 @@ function init_toggle_supervisor_autostart() {
     done
 }
 
-
-function init_source_preflight_scripts() {
-    preflight_dir="/opt/ai-dock/bin/preflight.d"
-    printf "Looking for scripts in %s...\n" "$preflight_dir"
-    for script in /opt/ai-dock/bin/preflight.d/*.sh; do
-        source "$script";
-    done
-}
-
 # This could be much better...
 function init_strip_quotes() {
     if [[ -z $1 ]]; then
@@ -329,7 +320,6 @@ ldconfig
 
 STAGE=envs-init
 init_set_envs "$@"
-init_source_preflight_scripts
 
 # Invoke initialization scripts.
 STAGE=cont-init

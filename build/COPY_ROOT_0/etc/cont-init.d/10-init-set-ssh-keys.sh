@@ -5,7 +5,6 @@
 #
 
 set -e # Exit immediately if a command exits with a non-zero status.
-set -u # Treat unset variables as an error.
 
 if [[ -f "/root/.ssh/authorized_keys_mount" ]]; then
   cat /root/.ssh/authorized_keys_mount > /root/.ssh/authorized_keys

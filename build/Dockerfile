@@ -29,26 +29,35 @@ RUN \
     mkdir -p /opt/caddy/tls && \
     mv ./caddy /opt/caddy/bin
 
+FROM jlesage/baseimage:ubuntu-22.04-v3 AS base
+
 # For build automation - Allows building from any Debian-based image
 
 FROM ${IMAGE_BASE}
 
 # System libs are handled in /etc/ld.so.conf.d
 # Python environments only to use this variable
-ENV LD_LIBRARY_PATH=
+ENV LD_LIBRARY_PATH=""
 
 #COPY --from=caddybuilder /opt/caddy/ /opt/caddy/
+COPY --from=base /defaults/service /defaults/service
+COPY --from=base /etc/logmonitor /etc/logmonitor
+COPY --from=base /etc/services.d /etc/services.d
+COPY --from=base /opt/base/etc /opt/base/etc
+COPY --from=base /opt/base/bin /opt/base/bin
+COPY --from=base /opt/base/sbin /opt/base/sbin
 
 # Determines which scripts at /opt/ai-dock/bin/build/layerX will be run by init.sh
-ARG XPU_TARGET="GPU_NVIDIA" # GPU_AMD, CPU
+# GPU_AMD, CPU
+ARG XPU_TARGET="GPU_NVIDIA"
 ENV XPU_TARGET=${XPU_TARGET}
 
 ARG NODE_VERSION=v22.2.0
 ENV NODE_VERSION=${NODE_VERSION}
 
-LABEL org.opencontainers.image.source https://github.com/ai-dock/base-image
+LABEL org.opencontainers.image.source=https://github.com/ai-dock/base-image
 
-LABEL org.opencontainers.image.description "Base image for ai-dock."
+LABEL org.opencontainers.image.description="Base image for ai-dock."
 
 LABEL maintainer="Rob Ballantyne <rob@dynamedia.uk>"
 
@@ -58,18 +67,18 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV TZ=UTC
 ENV SHELL="/bin/bash"
-ENV USER_NAME=user
-ENV USER_PASSWORD=password
+ENV USER_NAME=develop
+ENV USER_PASSWORD=develop
 ENV USER_GROUPS=users,ai-dock,adm,sudo,audio,video,tty,cdrom,dialout,dip,fax,floppy,lp,plugdev,ssl-cert,sudo,tape,voice
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH=/opt/ai-dock/bin:/opt/caddy/bin:$PATH
-ENV OPT_SYNC=
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/base/sbin:/opt/base/bin:/opt/ai-dock/bin:/opt/caddy/bin
+ENV OPT_SYNC=""
 ENV PYTHONUNBUFFERED=true
 ENV VENV_DIR=/opt/environments/python
 ENV SERVICEPORTAL_VENV=${VENV_DIR}/serviceportal
 ENV SERVICEPORTAL_VENV_PYTHON=${SERVICEPORTAL_VENV}/bin/python
 ENV SERVICEPORTAL_VENV_PIP=${SERVICEPORTAL_VENV}/bin/pip
-ENV SUPERVISOR_NO_AUTOSTART=
+ENV SUPERVISOR_NO_AUTOSTART=""
 
 ENV APT_INSTALL="apt-get install -y --no-install-recommends"
 ENV RCLONE_CONFIG="/etc/rclone/rclone.conf"

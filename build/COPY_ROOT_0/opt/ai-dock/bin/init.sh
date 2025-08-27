@@ -328,15 +328,19 @@ init_run_scripts
 # Finally, invoke the process supervisor.
 STAGE=init
 
+if ! grep -q '^cinit:' /etc/group; then
+  groupadd -g 72 cinit
+fi
+
 set --
 set -- "$@" "--progname"
 set -- "$@" "supervisor"
 set -- "$@" "--services-gracetime"
 set -- "$@" "${SERVICES_GRACETIME:-5000}"
 set -- "$@" "--default-service-uid"
-set -- "$@" "${USER_ID}"
+set -- "$@" "${USER_NAME}"
 set -- "$@" "--default-service-gid"
-set -- "$@" "${GROUP_ID}"
+set -- "$@" "${USER_NAME}"
 if [ "${CONTAINER_DEBUG:-0}" -eq 1 ]; then
     set -- "$@" "--debug"
 fi

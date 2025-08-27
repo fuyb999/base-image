@@ -82,7 +82,7 @@ chown ${WORKSPACE_UID}.${WORKSPACE_GID} "$home_dir"
 chmod g+s "$home_dir"
 groupadd -g $WORKSPACE_GID $USER_NAME
 useradd -ms /bin/bash $USER_NAME -d $home_dir -u $WORKSPACE_UID -g $WORKSPACE_GID
-printf "user:%s" "${USER_PASSWORD}" | chpasswd
+printf "%s:%s" "${USER_NAME}" "${USER_PASSWORD}" | chpasswd > /dev/null 2>&1
 usermod -a -G $USER_GROUPS $USER_NAME
 
 # For AMD devices - Ensure render group is created if /dev/kfd is present

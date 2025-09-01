@@ -1,10 +1,10 @@
 ARG IMAGE_BASE="nvidia/cuda:11.8.0-base-ubuntu22.04"
 
 # Caddy build
-FROM ghcr.io/ai-dock/base-image:v2-cpu-22.04 as caddybuilder
+FROM ghcr.io/ai-dock/base-image:v2-cpu-22.04 AS caddybuilder
 
 # Caddy build
-FROM ubuntu:22.04 as caddybuilder2
+FROM ubuntu:22.04 AS caddybuilder2
 
 ENV PATH=/opt/go/bin:$PATH
 ENV GOROOT=/opt/go

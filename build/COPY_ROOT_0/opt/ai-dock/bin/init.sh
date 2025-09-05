@@ -338,9 +338,9 @@ set -- "$@" "supervisor"
 set -- "$@" "--services-gracetime"
 set -- "$@" "${SERVICES_GRACETIME:-5000}"
 set -- "$@" "--default-service-uid"
-set -- "$@" "1000"
+set -- "$@" "${USER_ID}"
 set -- "$@" "--default-service-gid"
-set -- "$@" "1000"
+set -- "$@" "${GROUP_ID}"
 if [ "${CONTAINER_DEBUG:-0}" -eq 1 ]; then
     set -- "$@" "--debug"
 fi

@@ -83,6 +83,8 @@ ENV SUPERVISOR_NO_AUTOSTART=""
 ENV APT_INSTALL="apt-get install -y --no-install-recommends"
 ENV RCLONE_CONFIG="/etc/rclone/rclone.conf"
 ENV IMAGE_SLUG="base-image"
+ENV GROUP_ID=1000
+ENV USER_ID=1000
 # Copy early so we can use scripts in the build - Changes to these files will invalidate the cache and cause a rebuild.
 COPY --chown=0:1111 ./COPY_ROOT_0/ /
 

@@ -20,15 +20,7 @@ if [[ ! $(grep "# First init complete" /root/.bashrc) ]]; then
     printf "source /opt/ai-dock/etc/environment.sh\n" >> /root/.bashrc
     printf "nvm use default > /dev/null 2>&1\n" >> /root/.bashrc
 
-    if [[ -n $PYTHON_DEFAULT_VENV ]]; then
-        printf '\nif [[ -d $WORKSPACE/environments/python/$PYTHON_DEFAULT_VENV ]]; then\n' >> /root/.bashrc
-        printf '    source "$WORKSPACE/environments/python/$PYTHON_DEFAULT_VENV/bin/activate"\n' >> /root/.bashrc
-        printf 'else\n' >> /root/.bashrc
-        printf '    source "$VENV_DIR/$PYTHON_DEFAULT_VENV/bin/activate"\n' >> /root/.bashrc
-        printf 'fi\n' >> /root/.bashrc
-    fi
-
-    printf "cd %s\n" "$WORKSPACE" >> /root/.bashrc
+    printf "cd %s\n" "/home/$USER_NAME" >> /root/.bashrc
     ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 

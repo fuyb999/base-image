@@ -62,15 +62,19 @@ LABEL org.opencontainers.image.description="Base image for ai-dock."
 LABEL maintainer="Rob Ballantyne <rob@dynamedia.uk>"
 
 SHELL ["/bin/bash", "-c"]
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Set ENV variables
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
-ENV TZ=UTC
+ENV TZ=Asia/Shanghai
 ENV SHELL="/bin/bash"
+ENV GROUP_ID=1000
+ENV USER_ID=1000
 ENV USER_NAME=develop
 ENV USER_PASSWORD=develop
 ENV USER_GROUPS=users,ai-dock,adm,sudo,audio,video,tty,cdrom,dialout,dip,fax,floppy,lp,plugdev,ssl-cert,tape,voice
-ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME=/home/${USER_NAME}
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/base/sbin:/opt/base/bin:/opt/ai-dock/bin:/opt/caddy/bin
 ENV OPT_SYNC=""
 ENV PYTHONUNBUFFERED=true
@@ -83,8 +87,7 @@ ENV SUPERVISOR_NO_AUTOSTART=""
 ENV APT_INSTALL="apt-get install -y --no-install-recommends"
 ENV RCLONE_CONFIG="/etc/rclone/rclone.conf"
 ENV IMAGE_SLUG="base-image"
-ENV GROUP_ID=1000
-ENV USER_ID=1000
+
 # Copy early so we can use scripts in the build - Changes to these files will invalidate the cache and cause a rebuild.
 COPY --chown=0:1111 ./COPY_ROOT_0/ /
 

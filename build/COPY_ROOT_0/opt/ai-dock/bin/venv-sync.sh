@@ -9,6 +9,8 @@ venvsync() {
         return 1
     fi
 
+    WORKSPACE=${WORKSPACE:-"$HOME"}
+
     local workspace_path="$WORKSPACE/environments/python/$venv_name"
     local source_path="/opt/environments/python/$venv_name"
     local archive_path="$WORKSPACE/environments/python/${venv_name}.tar"

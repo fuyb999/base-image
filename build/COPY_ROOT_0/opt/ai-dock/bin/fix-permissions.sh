@@ -35,15 +35,15 @@ function fix_container() {
 function fix_workspace() {
     if [[ $WORKSPACE_MOUNTED == "true" && $WORKSPACE_PERMISSIONS != "false" ]]; then
         printf "Fixing workspace permissions...\n"
-        chown "${WORKSPACE_UID}.${WORKSPACE_GID}" "${WORKSPACE}"
-        chmod g+w "${WORKSPACE}"
-        chmod g+s "${WORKSPACE}"
-        find "${WORKSPACE}" -type d ! -perm -g=s -exec chmod g+s {} \;
-        find "${WORKSPACE}" ! -uid "${WORKSPACE_UID}" -exec chown "${WORKSPACE_UID}.${WORKSPACE_GID}" {} \;
-        chmod o-rw "${WORKSPACE}/home/${USER_NAME}"
-        if [[ -e ${WORKSPACE}/home/user/.ssh/authorized_keys ]]; then
-            chmod 700 "${WORKSPACE}/home/${USER_NAME}/.ssh"
-            chmod 600 "${WORKSPACE}/home/${USER_NAME}/.ssh/authorized_keys"
+        chown "${USER_ID}.${GROUP_ID}" "${HOME}"
+        chmod g+w "${HOME}"
+        chmod g+s "${HOME}"
+        find "${HOME}" -type d ! -perm -g=s -exec chmod g+s {} \;
+        find "${HOME}" ! -uid "${USER_ID}" -exec chown "${USER_ID}.${GROUP_ID}" {} \;
+        chmod o-rw "${HOME}"
+        if [[ -e ${HOME}/.ssh/authorized_keys ]]; then
+            chmod 700 "${HOME}/.ssh"
+            chmod 600 "${HOME}/.ssh/authorized_keys"
         fi
         printf "Workspace file permissions reset\n"
     else

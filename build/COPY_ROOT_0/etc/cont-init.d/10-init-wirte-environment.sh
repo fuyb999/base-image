@@ -19,8 +19,6 @@ if [[ ! $(grep "# First init complete" /root/.bashrc) ]]; then
     printf "umask 002\n" >> /root/.bashrc
     printf "source /opt/ai-dock/etc/environment.sh\n" >> /root/.bashrc
     printf "nvm use default > /dev/null 2>&1\n" >> /root/.bashrc
-
-    printf "cd %s\n" "/home/$USER_NAME" >> /root/.bashrc
     ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 

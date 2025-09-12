@@ -197,6 +197,7 @@ function init_count_quicktunnels() {
 }
 
 init_sync_opt() {
+    WORKSPACE=${WORKSPACE:-"$HOME"}
     # Applications at /opt *always* get synced to a mounted workspace
     if [[ $WORKSPACE_MOUNTED = "true" ]]; then
         printf "Opt sync start: %s\n" "$(date +"%x %T.%3N")" >> /var/log/timing_data
@@ -206,30 +207,30 @@ init_sync_opt() {
             if [[ ! -d $opt_dir || $opt_dir = "/opt/" || $opt_dir = "/opt/ai-dock" ]]; then
                 continue
             fi
-            
+
             ws_dir="${WORKSPACE}${item}"
             archive="${item}.tar"
 
             # remove old backup links (depreciated)
             rm -f "${ws_dir}-link"
-            
+
             # Restarting stopped container
             if [[ -d $ws_dir && -L $opt_dir ]]; then
                 printf "%s already symlinked to %s\n" $opt_dir $ws_dir
                 continue
             fi
-            
+
             # Reset symlinks first
             if [[ -L $opt_dir ]]; then rm -f "$opt_dir"; fi
             if [[ -L $ws_dir ]]; then rm -f "$ws_dir"; fi
-            
+
             # Sanity check
             # User broke something - Container requires tear-down & restart
             if [[ ! -d $opt_dir && ! -d $ws_dir ]]; then
                 printf "\U274C Critical directory ${opt_dir} is missing without a backup!\n"
                 continue
             fi
-            
+
             # Copy & delete directories
             # Found a Successfully copied directory
             if [[ -d $ws_dir && -f $ws_dir/.move_complete ]]; then
@@ -254,7 +255,7 @@ init_sync_opt() {
                 printf "Moved %s to %s\n" "$opt_dir" "$ws_dir"
                 printf 1 > $ws_dir/.move_complete
             fi
-            
+
             # Create symlinks
             # Use workspace version
             if [[ -f "${ws_dir}/.move_complete" ]]; then

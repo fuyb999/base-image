@@ -12,7 +12,7 @@ USER_ID=${USER_ID:-1000}
 GROUP_ID=${GROUP_ID:-1000}
 
 # 创建用户和组
-home_dir="/home/${USER_NAME}"
+HOME=${HOME:-"/home/${USER_NAME}"}
 
 # 检查组是否已存在，如果不存在则创建
 if ! getent group $USER_NAME >/dev/null 2>&1; then
@@ -36,12 +36,13 @@ if id -u $USER_NAME >/dev/null 2>&1; then
     fi
 else
     # 用户不存在，创建用户
-    useradd -ms /bin/bash $USER_NAME -d $home_dir -u $USER_ID -g $GROUP_ID
+    useradd -ms /bin/bash $USER_NAME -d $HOME -u $USER_ID -g $GROUP_ID
     printf "%s:%s" "${USER_NAME}" "${USER_PASSWORD}" | chpasswd > /dev/null 2>&1
+    usermod -a -G $USER_GROUPS $USER_NAME
 fi
 
 # 确保家目录所有权正确
-chown -R ${USER_ID}:${GROUP_ID} "${home_dir}"
+chown ${USER_ID}:${GROUP_ID} "${HOME}"
 
 # 可能不存在的组 - 添加用户到 sgx 组（如果存在）
 if getent group sgx >/dev/null 2>&1; then
@@ -55,19 +56,19 @@ fi
 sed -i 's/^Defaults[ \t]*secure_path/#Defaults secure_path/' /etc/sudoers
 
 # 设置 bashrc 和 profile
-if [[ ! -e ${home_dir}/.bashrc ]]; then
-    cp -f /root/.bashrc ${home_dir}
-    cp -f /root/.profile ${home_dir}
-    chown ${USER_ID}:${GROUP_ID} "${home_dir}/.bashrc" "${home_dir}/.profile"
+if [[ ! -e ${HOME}/.bashrc ]]; then
+    cp -f /root/.bashrc ${HOME}
+    cp -f /root/.profile ${HOME}
+    chown ${USER_ID}:${GROUP_ID} "${HOME}/.bashrc" "${HOME}/.profile"
 fi
 
 # 设置 SSH 密钥
-if [[ -e /root/.ssh/authorized_keys && ! -d ${home_dir}/.ssh ]]; then
-    rm -f ${home_dir}/.ssh
-    mkdir -pm 700 ${home_dir}/.ssh > /dev/null 2>&1
-    cp -f /root/.ssh/authorized_keys ${home_dir}/.ssh/authorized_keys
-    chown -R ${USER_ID}:${GROUP_ID} "${home_dir}/.ssh" > /dev/null 2>&1
-    chmod 600 ${home_dir}/.ssh/authorized_keys > /dev/null 2>&1
+if [[ -e /root/.ssh/authorized_keys && ! -d ${HOME}/.ssh ]]; then
+    rm -f ${HOME}/.ssh
+    mkdir -pm 700 ${HOME}/.ssh > /dev/null 2>&1
+    cp -f /root/.ssh/authorized_keys ${HOME}/.ssh/authorized_keys
+    chown -R ${USER_ID}:${GROUP_ID} "${HOME}/.ssh" > /dev/null 2>&1
+    chmod 600 ${HOME}/.ssh/authorized_keys > /dev/null 2>&1
 fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

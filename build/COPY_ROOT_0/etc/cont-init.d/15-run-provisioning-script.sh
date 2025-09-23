@@ -19,7 +19,7 @@ if [[ -n $PROVISIONING_SCRIPT ]]; then
 fi
 
 # Provisioning script should create the lock file if it wants to only run once
-if [[ ! -e "${WORKSPACE}/".update_lock ]]; then
+if [[ ! -e "${HOME}/".update_lock ]]; then
     file="/opt/ai-dock/bin/provisioning.sh"
     printf "Looking for provisioning.sh...\n"
     if [[ ! -f ${file} ]]; then

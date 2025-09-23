@@ -9,7 +9,7 @@ set -e # Exit immediately if a command exits with a non-zero status.
  # Ensure all variables available for interactive sessions
 sed -i '7,$d' /opt/ai-dock/etc/environment.sh
 while IFS='=' read -r -d '' key val; do
-    if [[  $key != "HOME" ]]; then
+    if [[ $key != "HOME" ]]; then
         env-store "$key"
     fi
 done < <(env -0)

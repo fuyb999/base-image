@@ -1,5 +1,6 @@
 # BUILDTIME INSTRUCTIONS
-if [[ ! -f ~/.gitconfig ]]; then
+
+if [[ "$(id -u)" == "${USER_ID}" ]] && [[ ! -f ~/.gitconfig ]]; then
     git config --global --add safe.directory "*"
 fi
 

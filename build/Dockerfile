@@ -52,9 +52,6 @@ COPY --from=base /opt/base/sbin /opt/base/sbin
 ARG XPU_TARGET="GPU_NVIDIA"
 ENV XPU_TARGET=${XPU_TARGET}
 
-ARG NODE_VERSION=v22.2.0
-ENV NODE_VERSION=${NODE_VERSION}
-
 LABEL org.opencontainers.image.source=https://github.com/ai-dock/base-image
 
 LABEL org.opencontainers.image.description="Base image for ai-dock."
@@ -91,17 +88,12 @@ ENV IMAGE_SLUG="base-image"
 # Copy early so we can use scripts in the build - Changes to these files will invalidate the cache and cause a rebuild.
 COPY --chown=0:1111 ./COPY_ROOT_0/ /
 
-ARG CUDA_STRING
-ARG ROCM_STRING
-
 # Update mirror
 RUN sed -i -E 's/(archive|security).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
 
 # Use build scripts to ensure we can build all targets from one Dockerfile in a single layer.
 # Don't put anything heavy in here - We can use multi-stage building above if necessary.
-#RUN yes | unminimize && \
-#    set -eo pipefail && /opt/ai-dock/bin/build/layer0/init.sh | tee /var/log/build.log
-
 RUN /opt/ai-dock/bin/build/layer0/init.sh | tee /var/log/build.log
+
 # Keep init.sh as-is and place additional logic in /opt/ai-dock/bin/preflight.d
 CMD ["init.sh"]

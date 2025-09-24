@@ -5,5 +5,3 @@ if [[ "$(id -u)" == "${USER_ID}" ]] && [[ ! -f ~/.gitconfig ]]; then
 fi
 
 # RUNTIME INSTRUCTIONS
-
-

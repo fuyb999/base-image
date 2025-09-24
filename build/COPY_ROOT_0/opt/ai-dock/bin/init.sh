@@ -342,7 +342,7 @@ set -- "$@" "--default-service-uid"
 set -- "$@" "${USER_ID}"
 set -- "$@" "--default-service-gid"
 set -- "$@" "${GROUP_ID}"
-if [ "${CONTAINER_DEBUG:-0}" -eq 1 ]; then
+if [ ${CONTAINER_DEBUG:-0} -eq 1 ]; then
     set -- "$@" "--debug"
 fi
 

@@ -14,7 +14,7 @@ while IFS='=' read -r -d '' key val; do
     fi
 done < <(env -0)
 
-if ! sudo grep -q "# First init complete" /root/.bashrc; then
+if [ ! -f /root/.bashrc ] || ! sudo grep -q "# First init complete" /root/.bashrc; then
     echo "# First init complete" | sudo tee -a /root/.bashrc > /dev/null
     echo "umask 002" | sudo tee -a /root/.bashrc > /dev/null
     echo "source /opt/ai-dock/etc/environment.sh" | sudo tee -a /root/.bashrc > /dev/null

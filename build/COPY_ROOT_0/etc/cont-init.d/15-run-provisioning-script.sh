@@ -31,8 +31,9 @@ if [[ ! -e "${HOME}/".update_lock ]]; then
         chmod 0755 "${temp_file}"
         if [ $(id -u) -eq 0 ]; then
           su -l "${USER_NAME}" -c "${temp_file}"
+        else
+          bash -c "${temp_file}"
         fi
-        bash -c "${temp_file}"
         sudo ldconfig
     fi
 else

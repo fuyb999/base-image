@@ -6,25 +6,28 @@
 
 set -e # Exit immediately if a command exits with a non-zero status.
 
-if [[ -f "/root/.ssh/authorized_keys_mount" ]]; then
-  cat /root/.ssh/authorized_keys_mount > /root/.ssh/authorized_keys
+if sudo test -f "/root/.ssh/authorized_keys_mount"; then
+  sudo cat /root/.ssh/authorized_keys_mount | sudo tee /root/.ssh/authorized_keys > /dev/null
 fi
 
 # Named to avoid conflict with the cloud providers below
 
 if [[ -n $SSH_PUBKEY ]]; then
-    printf "\n%s\n" "$SSH_PUBKEY" > /root/.ssh/authorized_keys
+    echo "$SSH_PUBKEY" | sudo tee -a /root/.ssh/authorized_keys > /dev/null
 fi
 
 # Alt names for $SSH_PUBKEY
 # runpod.io
 if [[ -n $PUBLIC_KEY ]]; then
-    printf "\n%s\n" "$PUBLIC_KEY" > /root/.ssh/authorized_keys
+    echo "$PUBLIC_KEY" | sudo tee -a /root/.ssh/authorized_keys > /dev/null
 fi
 
 # vast.ai
 if [[ -n $SSH_PUBLIC_KEY ]]; then
-    printf "\n%s\n" "$SSH_PUBLIC_KEY" > /root/.ssh/authorized_keys
+    echo "$SSH_PUBLIC_KEY" | sudo tee -a /root/.ssh/authorized_keys > /dev/null
 fi
+
+# 设置正确的权限
+sudo chmod 600 /root/.ssh/authorized_keys
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

@@ -55,19 +55,15 @@ if ! sudo grep -q "^${USER_NAME} ALL" /etc/sudoers; then
 fi
 sudo sed -i 's/^Defaults[ \t]*secure_path/#Defaults secure_path/' /etc/sudoers
 
-if [ $(id -u) -eq 0 ]; then
-  return 0
-fi
-
 # 设置 bashrc 和 profile
-if [[ ! -e ${HOME}/.bashrc ]]; then
+if [[ -f /root/.bashrc && ! -e ${HOME}/.bashrc ]]; then
     cp -f /root/.bashrc ${HOME}
     cp -f /root/.profile ${HOME}
     chown ${USER_ID}:${GROUP_ID} "${HOME}/.bashrc" "${HOME}/.profile"
 fi
 
 # 设置 SSH 密钥
-if [[ -e /root/.ssh/authorized_keys && ! -d ${HOME}/.ssh ]]; then
+if [[ -f /root/.bashrc && -e /root/.ssh/authorized_keys && ! -d ${HOME}/.ssh ]]; then
     rm -f ${HOME}/.ssh
     mkdir -pm 700 ${HOME}/.ssh > /dev/null 2>&1
     cp -f /root/.ssh/authorized_keys ${HOME}/.ssh/authorized_keys

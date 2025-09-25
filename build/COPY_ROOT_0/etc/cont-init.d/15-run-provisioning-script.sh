@@ -29,8 +29,11 @@ if [[ ! -e "${HOME}/".update_lock ]]; then
         sed "s/^#\!\/bin\/false$/#\!\/bin\/bash/" "$file" > "$temp_file"
         chown "${USER_NAME}":ai-dock "${temp_file}"
         chmod 0755 "${temp_file}"
-        su -l "${USER_NAME}" -c "${temp_file}"
-        ldconfig
+        if [ $(id -u) -eq 0 ]; then
+          su -l "${USER_NAME}" -c "${temp_file}"
+        fi
+        bash -c "${temp_file}"
+        sudo ldconfig
     fi
 else
     printf "Refusing to provision container with %s.update_lock present\n" "$HOME"

@@ -3,13 +3,14 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 set -u # Treat unset variables as an error.
 
-trap init_cleanup EXIT
-
-
 function init_cleanup() {
     printf "Cleaning up...\n"
+    rm -rf /tmp/* \
+      $HOME/.vnc
     # Each running process should have its own cleanup routine
 }
+
+trap init_cleanup SIGTERM SIGINT SIGQUIT
 
 STAGE=init
 MIN_LOG_PREFIX_LENGTH=12
@@ -70,7 +71,7 @@ function init_run_scripts() {
             rc_file="$(mktemp)"
             (
                 set +e
-                ${f} 2>&1
+                sudo -E -u \#${USER_ID} ${f} 2>&1
                 echo $? > "${rc_file}"
             ) | log_script "${fname}"
             read -r rc < "${rc_file}"
@@ -324,6 +325,7 @@ init_set_envs "$@"
 
 # Invoke initialization scripts.
 STAGE=cont-init
+/etc/cont-init.d/10-init-create-user.sh
 init_run_scripts
 
 # Finally, invoke the process supervisor.

@@ -10,10 +10,10 @@ set -u # Treat unset variables as an error.
 source /opt/ai-dock/etc/environment.sh
 
 ak_file="/root/.ssh/authorized_keys"
-if [[ ! $(ssh-keygen -l -f $ak_file) ]]; then
-    printf "Skipping SSH server: No public key\n" 1>&2
-    # No error - Supervisor will not atempt restart
-    exec sleep 6
+if ! sudo ssh-keygen -l -f "$ak_file" > /dev/null 2>&1; then
+    echo "Skipping SSH server: No public key" 1>&2
+    # No error - Supervisor will not attempt restart
+    exec sleep 1
 fi
 
 # Dynamically check users - we might have a mounted /etc/passwd

@@ -14,12 +14,13 @@ while IFS='=' read -r -d '' key val; do
     fi
 done < <(env -0)
 
-if [[ ! $(grep "# First init complete" /root/.bashrc) ]]; then
-    printf "# First init complete\n" >> /root/.bashrc
-    printf "umask 002\n" >> /root/.bashrc
-    printf "source /opt/ai-dock/etc/environment.sh\n" >> /root/.bashrc
-    printf "nvm use default > /dev/null 2>&1\n" >> /root/.bashrc
-    ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" | sudo tee /etc/timezone > /dev/null
+if ! sudo grep -q "# First init complete" /root/.bashrc; then
+    echo "# First init complete" | sudo tee -a /root/.bashrc > /dev/null
+    echo "umask 002" | sudo tee -a /root/.bashrc > /dev/null
+    echo "source /opt/ai-dock/etc/environment.sh" | sudo tee -a /root/.bashrc > /dev/null
+    echo "nvm use default > /dev/null 2>&1" | sudo tee -a /root/.bashrc > /dev/null
+    sudo ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
+    echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

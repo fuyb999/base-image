@@ -95,5 +95,6 @@ RUN sed -i -E 's/(archive|security).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /
 # Don't put anything heavy in here - We can use multi-stage building above if necessary.
 RUN /opt/ai-dock/bin/build/layer0/init.sh | tee /var/log/build.log
 
+WORKDIR $HOME
 # Keep init.sh as-is and place additional logic in /opt/ai-dock/bin/preflight.d
 CMD ["init.sh"]

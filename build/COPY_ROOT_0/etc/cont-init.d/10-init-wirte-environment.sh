@@ -23,4 +23,11 @@ if [ ! -f /root/.bashrc ] || ! sudo grep -q "# First init complete" /root/.bashr
     echo "$TZ" | sudo tee /etc/timezone > /dev/null
 fi
 
+# 设置 bashrc 和 profile
+if [[ -f /root/.bashrc && ! -e ${HOME}/.bashrc ]]; then
+    cp -f /root/.bashrc ${HOME}
+    cp -f /root/.profile ${HOME}
+    chown ${USER_ID}:${GROUP_ID} "${HOME}/.bashrc" "${HOME}/.profile"
+fi
+
 # vim:ft=sh:ts=4:sw=4:et:sts=4

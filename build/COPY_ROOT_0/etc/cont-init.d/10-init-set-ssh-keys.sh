@@ -30,7 +30,6 @@ fi
 # 设置正确的权限
 sudo chmod 600 /root/.ssh/authorized_keys
 
-
 # 设置 SSH 密钥
 if [[ -e /root/.ssh/authorized_keys && ! -d ${HOME}/.ssh ]]; then
     rm -f ${HOME}/.ssh

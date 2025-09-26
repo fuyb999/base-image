@@ -55,13 +55,5 @@ if ! sudo grep -q "^${USER_NAME} ALL" /etc/sudoers; then
 fi
 sudo sed -i 's/^Defaults[ \t]*secure_path/#Defaults secure_path/' /etc/sudoers
 
-# 设置 SSH 密钥
-if [[ -f /root/.bashrc && -e /root/.ssh/authorized_keys && ! -d ${HOME}/.ssh ]]; then
-    rm -f ${HOME}/.ssh
-    mkdir -pm 700 ${HOME}/.ssh > /dev/null 2>&1
-    cp -f /root/.ssh/authorized_keys ${HOME}/.ssh/authorized_keys
-    chown -R ${USER_ID}:${GROUP_ID} "${HOME}/.ssh" > /dev/null 2>&1
-    chmod 600 ${HOME}/.ssh/authorized_keys > /dev/null 2>&1
-fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

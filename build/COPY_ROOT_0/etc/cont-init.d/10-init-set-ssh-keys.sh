@@ -30,4 +30,14 @@ fi
 # 设置正确的权限
 sudo chmod 600 /root/.ssh/authorized_keys
 
+
+# 设置 SSH 密钥
+if [[ -e /root/.ssh/authorized_keys && ! -d ${HOME}/.ssh ]]; then
+    rm -f ${HOME}/.ssh
+    mkdir -pm 700 ${HOME}/.ssh > /dev/null 2>&1
+    cp -f /root/.ssh/authorized_keys ${HOME}/.ssh/authorized_keys
+    chown -R ${USER_ID}:${GROUP_ID} "${HOME}/.ssh" > /dev/null 2>&1
+    chmod 600 ${HOME}/.ssh/authorized_keys > /dev/null 2>&1
+fi
+
 # vim:ft=sh:ts=4:sw=4:et:sts=4
